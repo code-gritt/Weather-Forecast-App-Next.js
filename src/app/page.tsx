@@ -130,13 +130,21 @@ export default function Home() {
 
   const firstData = data?.list[0];
 
-  // const firstDataForEachDate = uniqueDates.map((date) => {
-  //   return data?.list.find((entry) => {
-  //     const entryDate = new Date(entry.dt * 1000).toISOString().split("T")[0];
-  //     const entryTime = new Date(entry.dt * 1000).getHours();
-  //     return entryDate === date && entryTime >= 6;
-  //   });
-  // });
+  const uniqueDates = [
+    ...new Set(
+      data?.list.map(
+        (entry) => new Date(entry.dt * 1000).toISOString().split("T")[0]
+      )
+    ),
+  ];
+
+  const firstDataForEachDate = uniqueDates.map((date) => {
+    return data?.list.find((entry) => {
+      const entryDate = new Date(entry.dt * 1000).toISOString().split("T")[0];
+      const entryTime = new Date(entry.dt * 1000).getHours();
+      return entryDate === date && entryTime >= 6;
+    });
+  });
 
   https: return (
     <>
@@ -228,7 +236,7 @@ export default function Home() {
             </div>
           </section>
 
-          {/* <section className="flex w-full flex-col gap-4  ">
+          <section className="flex w-full flex-col gap-4  ">
             <p className="text-2xl">Forcast (7 days)</p>
             {firstDataForEachDate.map((d, i) => (
               <ForecastWeatherDetail
@@ -255,7 +263,7 @@ export default function Home() {
                 windSpeed={`${convertWindSpeed(d?.wind.speed ?? 1.64)} `}
               />
             ))}
-          </section> */}
+          </section>
         </main>
       </div>
     </>

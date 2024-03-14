@@ -15,56 +15,56 @@ type Props = { location?: string };
 const API_KEY = process.env.NEXT_PUBLIC_WEATHER_KEY;
 
 export default function Navbar({ location }: Props) {
-  // const [city, setCity] = useState("");
-  // const [error, setError] = useState("");
+  const [city, setCity] = useState("");
+  const [error, setError] = useState("");
 
-  // const [suggestions, setSuggestions] = useState<string[]>([]);
-  // const [showSuggestions, setShowSuggestions] = useState(false);
-  // const [place, setPlace] = useAtom(placeAtom);
-  // const [_, setLoadingCity] = useAtom(loadingCityAtom);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [place, setPlace] = useAtom(placeAtom);
+  const [_, setLoadingCity] = useAtom(loadingCityAtom);
 
-  // async function handleInputChang(value: string) {
-  //   setCity(value);
-  //   if (value.length >= 3) {
-  //     try {
-  //       const response = await axios.get(
-  //         `https://api.openweathermap.org/data/2.5/find?q=${value}&appid=${API_KEY}`
-  //       );
+  async function handleInputChang(value: string) {
+    setCity(value);
+    if (value.length >= 3) {
+      try {
+        const response = await axios.get(
+          "https://api.openweathermap.org/data/2.5/forecast?q=pune&appid=e9626038b2aee4c433e1fc37d7bbf55a&cnt=56"
+        );
 
-  //       const suggestions = response.data.list.map((item: any) => item.name);
-  //       setSuggestions(suggestions);
-  //       setError("");
-  //       setShowSuggestions(true);
-  //     } catch (error) {
-  //       setSuggestions([]);
-  //       setShowSuggestions(false);
-  //     }
-  //   } else {
-  //     setSuggestions([]);
-  //     setShowSuggestions(false);
-  //   }
-  // }
+        const suggestions = response.data.list.map((item: any) => item.name);
+        setSuggestions(suggestions);
+        setError("");
+        setShowSuggestions(true);
+      } catch (error) {
+        setSuggestions([]);
+        setShowSuggestions(false);
+      }
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  }
 
-  // function handleSuggestionClick(value: string) {
-  //   setCity(value);
-  //   setShowSuggestions(false);
-  // }
+  function handleSuggestionClick(value: string) {
+    setCity(value);
+    setShowSuggestions(false);
+  }
 
-  // function handleSubmiSearch(e: React.FormEvent<HTMLFormElement>) {
-  //   setLoadingCity(true);
-  //   e.preventDefault();
-  //   if (suggestions.length == 0) {
-  //     setError("Location not found");
-  //     setLoadingCity(false);
-  //   } else {
-  //     setError("");
-  //     setTimeout(() => {
-  //       setLoadingCity(false);
-  //       setPlace(city);
-  //       setShowSuggestions(false);
-  //     }, 500);
-  //   }
-  // }
+  function handleSubmiSearch(e: React.FormEvent<HTMLFormElement>) {
+    setLoadingCity(true);
+    e.preventDefault();
+    if (suggestions.length == 0) {
+      setError("Location not found");
+      setLoadingCity(false);
+    } else {
+      setError("");
+      setTimeout(() => {
+        setLoadingCity(false);
+        setPlace(city);
+        setShowSuggestions(false);
+      }, 500);
+    }
+  }
 
   // https: function handleCurrentLocation() {
   //   if (navigator.geolocation) {
@@ -104,7 +104,11 @@ export default function Navbar({ location }: Props) {
             <div className="relative hidden md:flex">
               {/* SearchBox */}
 
-              <SearchBox />
+              <SearchBox
+                value={city}
+                onSubmit={handleSubmiSearch}
+                onChange={(e) => handleInputChang(e.target.value)}
+              />
             </div>
           </section>
         </div>
